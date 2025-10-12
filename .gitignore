@@ -1,0 +1,28 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+*.dylib
+*.egg
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+gesture-env/
+
+# Notebooks and logs
+.ipynb_checkpoints/
+*.log
+*.tmp
+
+# OS & editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Build outputs
+dist/
+build/
