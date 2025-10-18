@@ -162,7 +162,7 @@ def display_batch_of_images_with_gestures_and_hand_landmarks(images, results):
 # -----------------------------------------
 
 # STEP 1: Configure the recognizer
-base_options = python.BaseOptions(model_asset_path='gesture_recognizer.task')
+base_options = python.BaseOptions(model_asset_path='models/gesture_recognizer.task')
 options = vision.GestureRecognizerOptions(base_options=base_options)
 recognizer = vision.GestureRecognizer.create_from_options(options)
 
@@ -170,9 +170,9 @@ recognizer = vision.GestureRecognizer.create_from_options(options)
 #FOR WEBCAM:
 import time
 
-w0, b0, w1, b1, w2, b2 = load_quantized_weights_bin('quantized_weights.bin')
+w0, b0, w1, b1, w2, b2 = load_quantized_weights_bin('models/quantized_weights.bin')
 try:
-    scaler_mean, scaler_scale = load_scaler_params('scaler_params.npz')
+    scaler_mean, scaler_scale = load_scaler_params('models/scaler_params.npz')
     scaler_scale = np.maximum(scaler_scale, 1e-6)
 except FileNotFoundError:
     scaler_mean = np.zeros(63, dtype=np.float32)

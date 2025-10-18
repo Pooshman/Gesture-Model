@@ -19,7 +19,7 @@ from tensorflow.keras.utils import to_categorical
 # ✅ Load CSV
 # ----------------------------------------
 
-df = pd.read_csv('landmarks_filtered.csv', header=None)
+df = pd.read_csv('data/landmarks_filtered.csv', header=None)
 print(f"[INFO] Loaded dataset shape: {df.shape}")
 
 # Last column = labels
@@ -45,8 +45,8 @@ print(f"[INFO] Train: {X_train.shape}, Test: {X_test.shape}")
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
-np.savez('scaler_params.npz', mean=scaler.mean_, scale=scaler.scale_)
-print("[INFO] Saved scaler parameters to scaler_params.npz")
+np.savez('models/scaler_params.npz', mean=scaler.mean_, scale=scaler.scale_)
+print("[INFO] Saved scaler parameters to models/scaler_params.npz")
 
 # ----------------------------------------
 # ✅ Build MLP model
@@ -107,5 +107,5 @@ print(f"[INFO] Test Accuracy: {acc:.3f}")
 # ✅ Save weights for FPGA or later
 # ----------------------------------------
 
-model.save('gesture_mlp_model.h5')
-print("[INFO] Model saved to gesture_mlp_model.h5")
+model.save('models/gesture_mlp_model.h5')
+print("[INFO] Model saved to models/gesture_mlp_model.h5")

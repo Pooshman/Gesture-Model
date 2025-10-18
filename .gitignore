@@ -26,4 +26,6 @@ gesture-env/
 # Build outputs
 dist/
 build/
-scaler_params.npz
+
+# Model outputs (generated files)
+models/scaler_params.npz

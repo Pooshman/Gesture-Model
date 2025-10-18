@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-CSV_FILE = 'landmarks_filtered.csv'
+CSV_FILE = 'data/landmarks_filtered.csv'
 
 df = pd.read_csv(CSV_FILE, header=None)
 label_counts = df.iloc[:, -1].value_counts().sort_index()

@@ -120,7 +120,7 @@ def display_batch_of_images_with_gestures_and_hand_landmarks(images, results):
 # -----------------------------------------
 
 # STEP 1: Configure the recognizer
-base_options = python.BaseOptions(model_asset_path='gesture_recognizer.task')
+base_options = python.BaseOptions(model_asset_path='models/gesture_recognizer.task')
 options = vision.GestureRecognizerOptions(base_options=base_options)
 recognizer = vision.GestureRecognizer.create_from_options(options)
 

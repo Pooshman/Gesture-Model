@@ -22,7 +22,7 @@ label_map = {
 # ✅ Setup recognizer
 # ----------------------------------------
 
-base_options = python.BaseOptions(model_asset_path='gesture_recognizer.task')
+base_options = python.BaseOptions(model_asset_path='models/gesture_recognizer.task')
 options = vision.GestureRecognizerOptions(base_options=base_options)
 recognizer = vision.GestureRecognizer.create_from_options(options)
 
@@ -31,7 +31,7 @@ recognizer = vision.GestureRecognizer.create_from_options(options)
 # ----------------------------------------
 
 cap = cv2.VideoCapture(0)
-csv_file = open('landmarks.csv', 'a', newline='')
+csv_file = open('data/landmarks.csv', 'a', newline='')
 csv_writer = csv.writer(csv_file)
 
 print("[INFO] Auto-logger started.")
@@ -108,4 +108,4 @@ while True:
 cap.release()
 csv_file.close()
 cv2.destroyAllWindows()
-print(f"[INFO] Logging done. Frames saved: {frame_count}. File: landmarks.csv")
+print(f"[INFO] Logging done. Frames saved: {frame_count}. File: data/landmarks.csv")

@@ -1,8 +1,8 @@
 import pandas as pd
 
 # File paths
-source_csv = 'landmarks.csv'     # CSV to append from
-target_csv = 'landmarks_filtered.csv'      # CSV to append into (will be overwritten)
+source_csv = 'data/landmarks.csv'     # CSV to append from
+target_csv = 'data/landmarks_filtered.csv'      # CSV to append into (will be overwritten)
 
 # Load both CSVs
 df_source = pd.read_csv(source_csv, header=None)

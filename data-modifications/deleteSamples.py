@@ -12,7 +12,7 @@ label_map = {
     7: 'ILoveYou'
 }
 
-INPUT_FILE = 'landmarks.csv'
+INPUT_FILE = 'data/landmarks.csv'
 REMOVE_LABELS = {0,1,2,3,4,6,7}  # Labels to delete
 
 # First, read and filter
