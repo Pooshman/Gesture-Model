@@ -5,16 +5,18 @@ This repository contains the software side of a gesture-recognition pipeline tha
 
 ## System Pipeline
 1. **Capture** – `gesture-pipelines/gesture-webcam.py` streams frames, extracts 21-point landmarks, and soft-validates predictions with the quantized weights.
-2. **Train** – `training/mlp-training.py` fits the MLP on curated datasets (`landmarks_filtered.csv`) to refresh `gesture_mlp_model.h5`.
-3. **Quantize/Export** – `quantizing.py` converts per-layer CSV weights into `quantized_weights.bin` for FPGA consumption.
+2. **Train** – `training/mlp-training.py` fits the MLP on curated datasets (`data/landmarks_filtered.csv`) to refresh `models/gesture_mlp_model.h5`.
+3. **Quantize/Export** – `scripts/quantizing.py` converts per-layer CSV weights into `models/quantized_weights.bin` for FPGA consumption.
 4. **Deploy** – FPGA logic consumes the binary weights, runs inference, evaluates the gesture passcode in a secure enclave, and relays unlock + control signals to the robot through the ESP32 peripheral.
 
 ## Repository Layout
+- `data/` – Landmark CSV datasets (`landmarks.csv`, `landmarks_filtered.csv`).
 - `data-modifications/` – CSV utilities for combining, pruning, and labeling landmark data.
 - `training/` – Model training and evaluation scripts (`mlp-training.py`, `gesture-logger.py`).
 - `gesture-pipelines/` – MediaPipe-based webcam and still-image prototypes.
+- `models/` – Trained assets (`gesture_mlp_model.h5`, `gesture_recognizer.task`, `quantized_weights.bin`, `layer_*_{weights,bias}.csv`).
+- `scripts/` – Utility scripts (`quantizing.py`).
 - `images/` – Sample gesture reference images.
-- `gesture_mlp_model.h5`, `quantized_weights.bin`, `layer_*_{weights,bias}.csv` – Latest trained assets staged for FPGA tooling.
 
 ## Setup
 1. Use Python 3.10+ and create a virtual environment (`python -m venv gesture-env`).
@@ -30,21 +32,21 @@ Run the MLP training loop from the repository root:
 ```bash
 python training/mlp-training.py
 ```
-The script stratifies the dataset, computes class weights, and reports validation accuracy. It also writes `scaler_params.npz`, which captures the normalization statistics used during training—keep this file with the exported weights so inference on the FPGA or host matches your preprocessing. Keep accuracy above 0.90 to maintain reliable unlock sequences; adjust preprocessing or class weights if performance drops. Use `gesture-logger.py` to collect new samples and extend the dataset when onboarding new gestures.
+The script stratifies the dataset, computes class weights, and reports validation accuracy. It also writes `models/scaler_params.npz`, which captures the normalization statistics used during training—keep this file with the exported weights so inference on the FPGA or host matches your preprocessing. Keep accuracy above 0.90 to maintain reliable unlock sequences; adjust preprocessing or class weights if performance drops. Use `training/gesture-logger.py` to collect new samples and extend the dataset when onboarding new gestures.
 
 ## Quantization & Deployment Artifacts
 After training, regenerate the FPGA-ready weights:
 ```bash
-python quantizing.py
+python scripts/quantizing.py
 ```
-This script expects the latest `layer_*` CSV exports in the root directory and rewrites `quantized_weights.bin`. Consume this binary inside your HDL/SoC project to initialize BRAM or ROM blocks. Track the checksum or git hash of each binary when flashing the Arty S7-25 to keep the hardware configuration auditable.
+This script expects the latest `layer_*` CSV exports in the `models/` directory and rewrites `models/quantized_weights.bin`. Consume this binary inside your HDL/SoC project to initialize BRAM or ROM blocks. Track the checksum or git hash of each binary when flashing the Arty S7-25 to keep the hardware configuration auditable.
 
 ## Live Gesture Testing
 Use the webcam prototype to verify predictions end-to-end:
 ```bash
 python gesture-pipelines/gesture-webcam.py
 ```
-The script loads `gesture_recognizer.task`, applies the saved scaler parameters, feeds frames through MediaPipe, and evaluates the quantized weights in Python. Confirm latency and class stability here before synthesizing FPGA builds. When experimenting with new display peripherals, mirror FPGA output in the console to speed up debugging.
+The script loads `models/gesture_recognizer.task`, applies the saved scaler parameters, feeds frames through MediaPipe, and evaluates the quantized weights in Python. Confirm latency and class stability here before synthesizing FPGA builds. When experimenting with new display peripherals, mirror FPGA output in the console to speed up debugging.
 
 ## FPGA Integration Notes
 - Reserve BRAM for the three dense layers and plan a streaming interface for 21 landmark triplets produced by the host.

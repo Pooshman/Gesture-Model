@@ -23,6 +23,9 @@ gesture-env/
 .vscode/
 .idea/
 
+# Claude Code
+.claude/
+
 # Build outputs
 dist/
 build/
