@@ -30,7 +30,7 @@ Run the MLP training loop from the repository root:
 ```bash
 python training/mlp-training.py
 ```
-The script stratifies the dataset, computes class weights, and reports validation accuracy. Keep accuracy above 0.90 to maintain reliable unlock sequences; adjust preprocessing or class weights if performance drops. Use `gesture-logger.py` to collect new samples and extend the dataset when onboarding new gestures.
+The script stratifies the dataset, computes class weights, and reports validation accuracy. It also writes `scaler_params.npz`, which captures the normalization statistics used during training—keep this file with the exported weights so inference on the FPGA or host matches your preprocessing. Keep accuracy above 0.90 to maintain reliable unlock sequences; adjust preprocessing or class weights if performance drops. Use `gesture-logger.py` to collect new samples and extend the dataset when onboarding new gestures.
 
 ## Quantization & Deployment Artifacts
 After training, regenerate the FPGA-ready weights:
@@ -44,7 +44,7 @@ Use the webcam prototype to verify predictions end-to-end:
 ```bash
 python gesture-pipelines/gesture-webcam.py
 ```
-The script loads `gesture_recognizer.task`, feeds frames through MediaPipe, and evaluates the quantized weights in Python. Confirm latency and class stability here before synthesizing FPGA builds. When experimenting with new display peripherals, mirror FPGA output in the console to speed up debugging.
+The script loads `gesture_recognizer.task`, applies the saved scaler parameters, feeds frames through MediaPipe, and evaluates the quantized weights in Python. Confirm latency and class stability here before synthesizing FPGA builds. When experimenting with new display peripherals, mirror FPGA output in the console to speed up debugging.
 
 ## FPGA Integration Notes
 - Reserve BRAM for the three dense layers and plan a streaming interface for 21 landmark triplets produced by the host.
