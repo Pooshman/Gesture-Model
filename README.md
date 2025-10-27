@@ -1,7 +1,7 @@
 # Gesture Model FPGA Pipeline
 
 ## Overview
-This repository contains the software side of a gesture-recognition pipeline that targets a custom SoC on the Arty S7-25 FPGA. A webcam on the host Mac collects hand landmarks with MediaPipe, a lightweight MLP classifies gestures, and the quantized model is exported so the FPGA can drive a BiStable robot via an ESP32 WiFi link. The long-term target is a secure, low-latency loop where the FPGA validates a four-gesture passcode through an enclave block, updates a host-facing display, and streams motion commands to the robot.
+This repository contains the software side of a gesture-recognition pipeline that targets a custom SoC on the Arty S7-25 FPGA. A webcam on my Macbook Pro collects hand landmarks with MediaPipe, a lightweight MLP classifies gestures, and the quantized model is exported so the FPGA can drive a BiStable robot via an ESP32 WiFi link. The long-term goal is a secure, low-latency loop where the FPGA validates a four-gesture passcode through an enclave block, updates a host-facing display, and streams motion commands to the robot.
 
 ## System Pipeline
 1. **Capture** – `gesture-pipelines/gesture-webcam.py` streams frames, extracts 21-point landmarks, and soft-validates predictions with the quantized weights.
